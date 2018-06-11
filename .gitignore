@@ -39,3 +39,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+
+# Karaf
+apache-karaf-4.2.0/
