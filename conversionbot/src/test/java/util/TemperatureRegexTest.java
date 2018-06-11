@@ -11,6 +11,13 @@ import static org.junit.Assert.assertEquals;
 public class TemperatureRegexTest {
 
     @Test
+    public void emptyString() {
+        final TemperatureConverter converter = new TemperatureConverter();
+        final String result = converter.getConversions("");
+        assertEquals("()", result);
+    }
+
+    @Test
     public void cTof() {
         // TODO: Don't test the string building logic, only the conversion and regex logic.
         final TemperatureConverter converter = new TemperatureConverter();
