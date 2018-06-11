@@ -28,41 +28,39 @@ public class DefaultClientConnection implements ClientConnection {
     shouldDisconnect = new AtomicBoolean(false);
   }
 
-  public Socket getSocket() {
-    return socket;
-  }
-
   public long getID() {
     return id;
   }
 
   public synchronized void sendMessage(String message) {
-      output.println(message);
+    output.println(message);
   }
 
   public void disconnect() {
-      shouldDisconnect.set(true);
+    shouldDisconnect.set(true);
   }
 
   public void run() {
-      while (!shouldDisconnect.get()) {
-        String userString = null;
+    while (!shouldDisconnect.get()) {
+      String userString = null;
 
-        // Disconnect if an IOException is raised because
-        // the user has disconnected.
-        try {
-          userString = input.readLine();
-        } catch (IOException e) {
-          Logger logger = Logger.getLogger(DefaultClientConnection.class.getName());
-          logger.log(Level.WARNING, e.getMessage());
-          shouldDisconnect.set(true);
-        }
-
-        // Record the message the user sent.
-        if (userString != null) {
-            messageDispatcher.dispatchMessage(this, userString);
-        }
+      // Disconnect if an IOException is raised because
+      // the user has disconnected.
+      try {
+        userString = input.readLine();
+      } catch (IOException e) {
+        Logger logger = Logger.getLogger(DefaultClientConnection.class.getName());
+        logger.log(Level.WARNING, e.getMessage());
+        shouldDisconnect.set(true);
       }
+
+      // Record the message the user sent.
+      if (userString != null) {
+        Logger logger = Logger.getLogger(DefaultClientConnection.class.getName());
+        logger.log(Level.INFO, String.format("Client #%d: %s", id, userString));
+        messageDispatcher.dispatchMessage(this, userString);
+      }
+    }
   }
 
   @Override
@@ -75,6 +73,6 @@ public class DefaultClientConnection implements ClientConnection {
       return false;
     }
     final ClientConnection other = (ClientConnection) obj;
-    return other.getID() == id && other.getSocket() == socket;
+    return other.getID() == id;
   }
 }

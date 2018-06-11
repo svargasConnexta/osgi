@@ -12,7 +12,6 @@ public class ClientConnectionThreadSpawner implements Runnable {
   private long connectionsSpawned = 0;
   private AtomicBoolean shouldExit;
   private final MessageDispatcher messageDispatcher;
-  private final int port;
   private final ServerSocket serverSocket;
 
   public ClientConnectionThreadSpawner(final MessageDispatcher messageDispatcher, final int port)
@@ -20,7 +19,6 @@ public class ClientConnectionThreadSpawner implements Runnable {
     serverSocket = new ServerSocket(port);
     shouldExit = new AtomicBoolean(false);
     this.messageDispatcher = messageDispatcher;
-    this.port = port;
   }
 
   public void exit() throws IOException {
@@ -51,5 +49,17 @@ public class ClientConnectionThreadSpawner implements Runnable {
         return;
       }
     }
+  }
+
+  public static void main(String[] args) throws IOException, InterruptedException {
+    ClientConnectionThreadSpawner clientConnectionThreadSpawner;
+    Thread connectionListenThread;
+    int maxUsers = 10;
+    int port = 8080;
+    MessageDispatcher messageDispatcher = new DefaultMessageDispatcher(maxUsers);
+    clientConnectionThreadSpawner = new ClientConnectionThreadSpawner(messageDispatcher, port);
+    connectionListenThread = new Thread(clientConnectionThreadSpawner);
+    connectionListenThread.start();
+    connectionListenThread.join();
   }
 }
