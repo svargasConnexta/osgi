@@ -1,3 +1,4 @@
+import junit.framework.AssertionFailedError;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,32 +21,44 @@ import static org.junit.Assert.assertEquals;
 
 public class ClientConnectionThreadSpawnerTest {
 
+  // Shared components
+  private final int portNumber = 8080;
+
+  // Server components
+  private final String url = "127.0.0.1";
+  private MessageDispatcher messageDispatcher;
+  private ClientConnectionThreadSpawner connectionThreadSpawner;
+  private Thread serverThread;
+  private final int maxUsers = 10;
+  private final int maxMessages = 9999;
+
   @Before
-  public void setUp() throws Exception {}
-
-  @After
-  public void tearDown() throws Exception {}
-
-  @Test
-  public void echoTest() throws IOException {
-    // Shared components
-    final int portNumber = 8080;
-
-    // Server components
-    final String url = "127.0.0.1";
-    final MessageDispatcher messageDispatcher = new DefaultMessageDispatcher();
-    final ClientConnectionThreadSpawner connectionThreadSpawner =
-        new ClientConnectionThreadSpawner(messageDispatcher, portNumber);
-
-    final Thread serverThread = new Thread(connectionThreadSpawner);
+  public void setUp() throws Exception {
+    messageDispatcher = new DefaultMessageDispatcher(maxUsers);
+    connectionThreadSpawner = new ClientConnectionThreadSpawner(messageDispatcher, portNumber);
+    serverThread = new Thread(connectionThreadSpawner);
     serverThread.setName("Connection Thread Spawner");
     serverThread.start();
+  }
 
-    // Client components
+  @After
+  public void tearDown() throws Exception {
+    // Shutdown the server.
+    try {
+      connectionThreadSpawner.exit();
+      serverThread.join();
+    } catch (InterruptedException e) {
+      Logger logger = Logger.getLogger(ClientConnectionThreadSpawnerTest.class.getName());
+      logger.log(Level.WARNING, e.getMessage());
+    }
+  }
+
+  @Test
+  public void singleUserReceivesEchoedMessage() {
+    // Client
     final Socket client;
     final PrintWriter out;
     final BufferedReader in;
-
     final String echoString = "Hello World!";
 
     // Connect a client to the server.
@@ -60,14 +75,55 @@ public class ClientConnectionThreadSpawnerTest {
       logger.log(Level.WARNING, e.getMessage());
       Assert.fail("Connection to server was unsuccessful.");
     }
+  }
 
-    // Shutdown the server.
-    try {
-      connectionThreadSpawner.exit();
-      serverThread.join();
-    } catch (InterruptedException e) {
-      Logger logger = Logger.getLogger(ClientConnectionThreadSpawnerTest.class.getName());
-      logger.log(Level.WARNING, e.getMessage());
+  @Test
+  public void multipleUsersRecieveEchoedMessages() throws IOException {
+    final List<Socket> clientSockets = new ArrayList<>();
+    final List<PrintWriter> outputs = new ArrayList<>();
+    final List<BufferedReader> inputs = new ArrayList<>();
+
+    final int numberOfClients = 3;
+
+    // Create 'numberOfClients' clients.
+    for (int i = 0; i < numberOfClients; ++i) {
+      final Socket client = new Socket(url, portNumber);
+      clientSockets.add(client);
+      outputs.add(new PrintWriter(client.getOutputStream(), true));
+      inputs.add(new BufferedReader(new InputStreamReader(client.getInputStream())));
     }
+
+    // Send a message with a number that corresponds to each client
+    for (int i = 0; i < numberOfClients; ++i) {
+      outputs.get(i).println(i);
+    }
+
+
+
+    /*
+    String zeroA = inputs.get(0).readLine();
+      String zeroB = inputs.get(0).readLine();
+      String zeroC = inputs.get(0).readLine();
+
+      String oneA = inputs.get(1).readLine();
+      String oneB = inputs.get(1).readLine();
+      String oneC = inputs.get(1).readLine();
+
+      String twoA = inputs.get(2).readLine();
+      String twoB = inputs.get(2).readLine();
+      String twoC = inputs.get(2).readLine();
+      */
+
+    // For each client, verify that they recieve the messages [0, numberOfClients)
+    // If there were 3 clients, then each client should get 0, 1, 2
+    for (int i =0; i < numberOfClients; ++i) {
+      for (int j = 0; j < numberOfClients; ++j) {
+          int actualNumber = Integer.parseInt(inputs.get(i).readLine());
+          if (j != actualNumber) {
+              throw new AssertionFailedError(String.format("Expected %d, got %d, Client #%d", j, actualNumber, i));
+          }
+      }
+    }
+
   }
 }

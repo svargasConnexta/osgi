@@ -18,7 +18,8 @@ public class DefaultClientConnection implements ClientConnection {
   private AtomicBoolean shouldDisconnect;
   private final MessageDispatcher messageDispatcher;
 
-  public DefaultClientConnection(Socket socket, long id, final MessageDispatcher messageDispatcher) throws IOException {
+  public DefaultClientConnection(Socket socket, long id, final MessageDispatcher messageDispatcher)
+      throws IOException {
     this.socket = socket;
     this.id = id;
     this.messageDispatcher = messageDispatcher;
@@ -35,7 +36,7 @@ public class DefaultClientConnection implements ClientConnection {
     return id;
   }
 
-  public void sendMessage(String message) {
+  public synchronized void sendMessage(String message) {
       output.println(message);
   }
 
@@ -61,7 +62,6 @@ public class DefaultClientConnection implements ClientConnection {
         if (userString != null) {
             messageDispatcher.dispatchMessage(this, userString);
         }
-
       }
   }
 
