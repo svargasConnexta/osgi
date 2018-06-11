@@ -6,7 +6,7 @@ public class TemperatureConverter {
 
   final Pattern temperaturePattern = Pattern.compile("(\\d+)\\s?([CcFf])");
 
-  String getConversions(String message) {
+  public String getConversions(String message) {
     final Matcher matcher = temperaturePattern.matcher(message);
     final StringBuilder result = new StringBuilder();
 
@@ -23,8 +23,10 @@ public class TemperatureConverter {
           String.format("%.2f %c -> %.2f %c, ", value, originalScale, converted, convertedScale));
     }
 
-    result.deleteCharAt(result.length() - 1); // Lazy way to remove trailing ' '
-    result.deleteCharAt(result.length() - 1); // Lazy way to remove trailing ','
+    if (result.length() > 2) {
+      result.deleteCharAt(result.length() - 1); // TODO: Lazy way to remove trailing ' '
+      result.deleteCharAt(result.length() - 1); // TODO: Lazy way to remove trailing ','
+    }
     result.append(")");
     return result.toString();
   }
