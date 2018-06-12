@@ -1,33 +1,57 @@
 package conversionbot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.*;
+import java.util.stream.Collectors;
 
 public class TemperatureConverter {
 
   final Pattern temperaturePattern = Pattern.compile("(\\d+)\\s?([CcFf])");
 
-  public String getConversions(String message) {
+  public List<Temperature> extractTemperatures(String message) {
     final Matcher matcher = temperaturePattern.matcher(message);
-    final StringBuilder result = new StringBuilder();
+    final List<Temperature> result = new ArrayList<>();
 
-    result.append("(");
     while (matcher.find()) {
       String strValue = matcher.group(1);
       String tmpType = matcher.group(2);
       double value = Double.parseDouble(strValue);
-      boolean isCelcius = tmpType.equalsIgnoreCase("C");
-      double converted = isCelcius ? 1.8 * value + 32.0 : (value - 32.0) * 0.5556;
-      char originalScale = isCelcius ? 'C' : 'F';
-      char convertedScale = isCelcius ? 'F' : 'C';
-      result.append(
-          String.format("%.2f %c -> %.2f %c, ", value, originalScale, converted, convertedScale));
+      final TemperatureUnit unit;
+      if (tmpType.equalsIgnoreCase(TemperatureUnit.Celcius.getSymbol())) {
+        unit = TemperatureUnit.Celcius;
+      } else {
+        unit = TemperatureUnit.Fahrenheit;
+      }
+      result.add(new Temperature(unit, value));
     }
 
-    if (result.length() > 2) {
-      result.deleteCharAt(result.length() - 1); // TODO: Lazy way to remove trailing ' '
-      result.deleteCharAt(result.length() - 1); // TODO: Lazy way to remove trailing ','
+    return result;
+  }
+
+  public List<Temperature> convertTemperatureList(List<Temperature> temperatures) {
+    return temperatures.stream().map(Temperature::toOpposite).collect(Collectors.toList());
+  }
+
+  public String convertTemperatureListAsString(List<Temperature> temperatures) {
+    final List<Temperature> converted = convertTemperatureList(temperatures);
+    final StringBuilder output = new StringBuilder("");
+    for (int i = 0; i < converted.size(); ++i) {
+      final Temperature original = temperatures.get(i);
+      final Temperature convert = converted.get(i);
+      output.append(
+          String.format(
+              "%.2f %s -> %.2f %s, ",
+              original.value, original.unit.getSymbol(), convert.value, convert.unit.getSymbol()));
     }
-    result.append(")");
-    return result.toString();
+
+    // Remove the trailing ',\s' from the string. Surround with '()'
+    if (output.length() > 0) {
+      output.delete(output.length() - 2, output.length());
+      output.insert(0, "(");
+      output.append(")");
+    }
+
+    return output.toString();
   }
 }
