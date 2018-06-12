@@ -62,7 +62,7 @@ public class TemperatureConverter {
       output.append(
           String.format(
               "%.2f %s -> %.2f %s, ",
-              original.value, original.unit.getSymbol(), convert.value, convert.unit.getSymbol()));
+              original.getValue(), original.getUnit().getSymbol(), convert.getValue(), convert.getUnit().getSymbol()));
     }
 
     // Remove the trailing ',\s' from the string. Surround with '()'

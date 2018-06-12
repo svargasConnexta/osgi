@@ -29,8 +29,8 @@ public class TemperatureRegexTest {
     final TemperatureConverter converter = new TemperatureConverter();
     final List<Temperature> actualResult = converter.extractTemperatures(message);
     assertEquals(1, actualResult.size());
-    assertEquals(Fahrenheit, actualResult.get(0).unit);
-    assertEquals(30, actualResult.get(0).value, delta);
+    assertEquals(Fahrenheit, actualResult.get(0).getUnit());
+    assertEquals(30, actualResult.get(0).getValue(), delta);
   }
 
   @Test
@@ -45,8 +45,8 @@ public class TemperatureRegexTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
-      assertEquals(expectedUnits[i], actualResult.get(i).unit);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
 
@@ -61,8 +61,8 @@ public class TemperatureRegexTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
-      assertEquals(expectedUnits[i], actualResult.get(i).unit);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
 
@@ -78,8 +78,8 @@ public class TemperatureRegexTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
-      assertEquals(expectedUnits[i], actualResult.get(i).unit);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
 
@@ -89,8 +89,8 @@ public class TemperatureRegexTest {
     final TemperatureConverter converter = new TemperatureConverter();
     final List<Temperature> actualResult = converter.convertTemperatureList(temp);
     assertEquals(1, actualResult.size());
-    assertEquals(Celsius, actualResult.get(0).unit);
-    assertEquals(48.88, actualResult.get(0).value, delta);
+    assertEquals(Celsius, actualResult.get(0).getUnit());
+    assertEquals(48.88, actualResult.get(0).getValue(), delta);
   }
 
   @Test
