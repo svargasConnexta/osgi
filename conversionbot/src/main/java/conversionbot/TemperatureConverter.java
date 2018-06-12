@@ -1,22 +1,42 @@
 package conversionbot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.*;
 import java.util.stream.Collectors;
 
 public class TemperatureConverter {
 
-  final Pattern temperaturePattern = Pattern.compile("(\\d+)\\s?([CcFf])");
+  final Pattern temperaturePattern = Pattern.compile("([+-]?[\\d,.]+)\\s?([CcFf])");
 
   public List<Temperature> extractTemperatures(String message) {
+      return extractTemperatures(message, Locale.ROOT);
+  }
+
+  public List<Temperature> extractTemperatures(String message, Locale locale) {
     final Matcher matcher = temperaturePattern.matcher(message);
     final List<Temperature> result = new ArrayList<>();
 
     while (matcher.find()) {
       String strValue = matcher.group(1);
       String tmpType = matcher.group(2);
-      double value = Double.parseDouble(strValue);
+
+      // Remove '+' as NumberFormat doesn't like it during parsing.
+      if (strValue.startsWith("+")) {
+        strValue = strValue.substring(1);
+      }
+
+      NumberFormat format = NumberFormat.getInstance(locale);
+      Number number;
+      try {
+        number = format.parse(strValue);
+      } catch (ParseException e) {
+          throw new RuntimeException(e);
+      }
+      double value = number.doubleValue();
       final TemperatureUnit unit;
       if (tmpType.equalsIgnoreCase(TemperatureUnit.Celsius.getSymbol())) {
         unit = TemperatureUnit.Celsius;
