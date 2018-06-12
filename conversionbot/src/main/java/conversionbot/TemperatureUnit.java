@@ -1,7 +1,7 @@
 package conversionbot;
 
 public enum TemperatureUnit {
-  Celcius("C"),
+  Celsius("C"),
   Fahrenheit("F");
 
   private final String symbol;

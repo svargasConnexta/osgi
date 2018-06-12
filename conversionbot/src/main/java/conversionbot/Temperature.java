@@ -1,6 +1,6 @@
 package conversionbot;
 
-import static conversionbot.TemperatureUnit.Celcius;
+import static conversionbot.TemperatureUnit.Celsius;
 import static conversionbot.TemperatureUnit.Fahrenheit;
 
 public class Temperature {
@@ -22,7 +22,7 @@ public class Temperature {
 
   public Temperature toOpposite() {
     if (unit == Fahrenheit) {
-      return toCelcius();
+      return toCelsius();
     }
 
     return toFahrenheit();
@@ -36,11 +36,11 @@ public class Temperature {
     return new Temperature(Fahrenheit, 1.8 * value + 32.0);
   }
 
-  public Temperature toCelcius() {
-    if (unit == Celcius) {
+  public Temperature toCelsius() {
+    if (unit == Celsius) {
       return this;
     }
 
-    return new Temperature(Celcius, (value - 32) * 0.5556);
+    return new Temperature(Celsius, (value - 32) * 0.5556);
   }
 }

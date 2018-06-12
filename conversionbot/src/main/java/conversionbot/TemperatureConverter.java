@@ -18,8 +18,8 @@ public class TemperatureConverter {
       String tmpType = matcher.group(2);
       double value = Double.parseDouble(strValue);
       final TemperatureUnit unit;
-      if (tmpType.equalsIgnoreCase(TemperatureUnit.Celcius.getSymbol())) {
-        unit = TemperatureUnit.Celcius;
+      if (tmpType.equalsIgnoreCase(TemperatureUnit.Celsius.getSymbol())) {
+        unit = TemperatureUnit.Celsius;
       } else {
         unit = TemperatureUnit.Fahrenheit;
       }
