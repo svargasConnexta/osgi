@@ -11,7 +11,7 @@ import static conversionbot.TemperatureUnit.Celsius;
 import static conversionbot.TemperatureUnit.Fahrenheit;
 import static org.junit.Assert.*;
 
-public class TemperatureRegexTest {
+public class TemperatureConverterTest {
 
   private final double delta = 0.1;
 
@@ -55,7 +55,8 @@ public class TemperatureRegexTest {
     final String message = "Phoenix is: 10.5f -31.3c 1,300c, +1,500,000 C, -1,345,385.32F";
     final double[] expectedValues = new double[] {10.5, -31.3, 1_300, 1_500_000, -1_345_385.32};
     final TemperatureConverter converter = new TemperatureConverter();
-    final TemperatureUnit[] expectedUnits = new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
+    final TemperatureUnit[] expectedUnits =
+        new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
     final List<Temperature> actualResult = converter.extractTemperatures(message);
     assertEquals(expectedValues.length, expectedUnits.length);
     assertEquals(actualResult.size(), expectedUnits.length);
@@ -67,11 +68,21 @@ public class TemperatureRegexTest {
   }
 
   @Test
+  public void extractTemperature_MalformedNumber_US_Locale() {
+    final String message = "The temperature is 3,3,3.3 F, it's hot.";
+    final TemperatureConverter converter = new TemperatureConverter();
+    final List<Temperature> actualResult = converter.extractTemperatures(message);
+    assertEquals(333.3, actualResult.get(0).getValue(), delta);
+  }
+
+  @Test
   public void extractTemperaturesMultiple_HardMode_Spain_Locale() {
     final String message = "Phoenix is: 10,5f -31,3c 1.300c +1.500.000,0 C, -1.345.385,32F";
     final double[] expectedValues = new double[] {10.5, -31.3, 1_300, 1_500_000, -1_345_385.32};
     final TemperatureConverter converter = new TemperatureConverter();
-    final TemperatureUnit[] expectedUnits = new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
+    final TemperatureUnit[] expectedUnits =
+        new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
+    // Spain is a country where numbers are written as "xxx.xxx.xxx,xx" so we use that locale here.
     Locale spanish = new Locale("es", "ES");
     final List<Temperature> actualResult = converter.extractTemperatures(message, spanish);
     assertEquals(expectedValues.length, expectedUnits.length);
