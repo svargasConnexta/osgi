@@ -65,6 +65,6 @@ public class TemperatureRegexTest {
         Arrays.asList(new Temperature(Celcius, 0), new Temperature(Fahrenheit, 32));
     final TemperatureConverter converter = new TemperatureConverter();
     final String actualResult = converter.convertTemperatureListAsString(temp);
-    assertEquals(actualResult, "(0.00 C -> 32.00 F, 32.00 F -> 0.00 C)");
+    assertEquals("(0.00 C -> 32.00 F, 32.00 F -> 0.00 C)", actualResult);
   }
 }
