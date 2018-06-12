@@ -7,6 +7,6 @@
     The "container" keeps track of the new object and its ID.
     Also, invoke an initialization routine when the bean is created. -->
     <service id="temperatureConversion" auto-export="all-classes">
-        <bean class="util.TemperatureConverter"/>
+        <bean class="conversionbot.TemperatureConverter"/>
     </service>
 </blueprint>
