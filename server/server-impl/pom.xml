@@ -12,5 +12,54 @@
     <artifactId>server-impl</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!--
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>server-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    -->
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.2.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <!--This embed header is needed because there is no bundle that exports this package-->
+                        <Embed-Dependency>
+                            commons-math3
+                        </Embed-Dependency>
+                        <!--These exports are needed for the service consumer lesson-->
+                        <Export-Package>
+                            org.apache.commons.math3.primes,
+                            provider
+                        </Export-Package>
+
+                        <!-- This section lets you add OSGi headers to the MANIFEST.MF
+                           We add a header to tell OSGi there is an Activator class. We use the
+                           use MyActivator to print messages just to test stopping and
+                           starting bundles. -->
+                        <Bundle-Activator>server.ServerActivator</Bundle-Activator>
+
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>7</source>
+                    <target>7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>

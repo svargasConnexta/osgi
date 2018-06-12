@@ -4,12 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>indie.sam.osgichat</groupId>
-        <artifactId>osgichat</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
+    <groupId>indie.sam.osgichat.bots</groupId>
     <artifactId>conversionbot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -29,7 +24,7 @@
 
         <dependency>
             <groupId>indie.sam.osgichat</groupId>
-            <artifactId>serverplugin</artifactId>
+            <artifactId>server-interfaces</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
