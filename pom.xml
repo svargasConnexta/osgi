@@ -5,9 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>indie.sam.osgichat</groupId>
-    <artifactId>serverplugin</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>osgichat</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>serverplugin</module>
+        <module>server</module>
+        <module>conversionbot</module>
+    </modules>
+
 
 
 </project>
