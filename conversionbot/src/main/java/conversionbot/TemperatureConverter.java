@@ -13,7 +13,7 @@ public class TemperatureConverter {
   final Pattern temperaturePattern = Pattern.compile("([+-]?[\\d,.]+)\\s?([CcFf])");
 
   public List<Temperature> extractTemperatures(String message) {
-      return extractTemperatures(message, Locale.ROOT);
+    return extractTemperatures(message, Locale.ROOT);
   }
 
   public List<Temperature> extractTemperatures(String message, Locale locale) {
@@ -34,7 +34,7 @@ public class TemperatureConverter {
       try {
         number = format.parse(strValue);
       } catch (ParseException e) {
-          throw new RuntimeException(e);
+        throw new RuntimeException(e);
       }
       double value = number.doubleValue();
       final TemperatureUnit unit;
@@ -62,7 +62,10 @@ public class TemperatureConverter {
       output.append(
           String.format(
               "%.2f %s -> %.2f %s, ",
-              original.getValue(), original.getUnit().getSymbol(), convert.getValue(), convert.getUnit().getSymbol()));
+              original.getValue(),
+              original.getUnit().getSymbol(),
+              convert.getValue(),
+              convert.getUnit().getSymbol()));
     }
 
     // Remove the trailing ',\s' from the string. Surround with '()'

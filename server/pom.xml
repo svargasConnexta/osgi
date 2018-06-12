@@ -3,12 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>server-impl</module>
+        <module>server-interfaces</module>
+    </modules>
 
-    <groupId>indie.sam.osgichat</groupId>
+    <parent>
+        <groupId>indie.sam.osgichat</groupId>
+        <artifactId>osgichat</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -22,13 +31,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>indie.sam.osgichat</groupId>
-            <artifactId>serverplugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
     <build>
         <plugins>
