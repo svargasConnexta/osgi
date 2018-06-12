@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static conversionbot.TemperatureUnit.Celsius;
 import static conversionbot.TemperatureUnit.Fahrenheit;
@@ -44,8 +45,41 @@ public class TemperatureRegexTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(actualResult.get(i).value, expectedValues[i], delta);
-      assertEquals(actualResult.get(i).unit, expectedUnits[i]);
+      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).unit);
+    }
+  }
+
+  @Test
+  public void extractTemperaturesMultiple_HardMode_US_Locale() {
+    final String message = "Phoenix is: 10.5f -31.3c 1,300c, +1,500,000 C, -1,345,385.32F";
+    final double[] expectedValues = new double[] {10.5, -31.3, 1_300, 1_500_000, -1_345_385.32};
+    final TemperatureConverter converter = new TemperatureConverter();
+    final TemperatureUnit[] expectedUnits = new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
+    final List<Temperature> actualResult = converter.extractTemperatures(message);
+    assertEquals(expectedValues.length, expectedUnits.length);
+    assertEquals(actualResult.size(), expectedUnits.length);
+
+    for (int i = 0; i < expectedUnits.length; ++i) {
+      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).unit);
+    }
+  }
+
+  @Test
+  public void extractTemperaturesMultiple_HardMode_Spain_Locale() {
+    final String message = "Phoenix is: 10,5f -31,3c 1.300c +1.500.000,0 C, -1.345.385,32F";
+    final double[] expectedValues = new double[] {10.5, -31.3, 1_300, 1_500_000, -1_345_385.32};
+    final TemperatureConverter converter = new TemperatureConverter();
+    final TemperatureUnit[] expectedUnits = new TemperatureUnit[] {Fahrenheit, Celsius, Celsius, Celsius, Fahrenheit};
+    Locale spanish = new Locale("es", "ES");
+    final List<Temperature> actualResult = converter.extractTemperatures(message, spanish);
+    assertEquals(expectedValues.length, expectedUnits.length);
+    assertEquals(actualResult.size(), expectedUnits.length);
+
+    for (int i = 0; i < expectedUnits.length; ++i) {
+      assertEquals(expectedValues[i], actualResult.get(i).value, delta);
+      assertEquals(expectedUnits[i], actualResult.get(i).unit);
     }
   }
 
