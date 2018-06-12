@@ -4,8 +4,8 @@ import static conversionbot.TemperatureUnit.Celcius;
 import static conversionbot.TemperatureUnit.Fahrenheit;
 
 public class Temperature {
-  TemperatureUnit unit;
-  double value;
+  final TemperatureUnit unit;
+  final double value;
 
   Temperature(TemperatureUnit unit, double value) {
     this.unit = unit;
