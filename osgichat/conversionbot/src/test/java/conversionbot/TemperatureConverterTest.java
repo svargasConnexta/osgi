@@ -9,11 +9,11 @@ import java.util.Locale;
 
 import static conversionbot.TemperatureUnit.Celsius;
 import static conversionbot.TemperatureUnit.Fahrenheit;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TemperatureConverterTest {
 
-  private final double delta = 0.1;
+  private static final double DELTA = 0.1;
 
   @Test
   public void extractTemperaturesEmptyString() {
@@ -30,7 +30,7 @@ public class TemperatureConverterTest {
     final List<Temperature> actualResult = converter.extractTemperatures(message);
     assertEquals(1, actualResult.size());
     assertEquals(Fahrenheit, actualResult.get(0).getUnit());
-    assertEquals(30, actualResult.get(0).getValue(), delta);
+    assertEquals(30, actualResult.get(0).getValue(), DELTA);
   }
 
   @Test
@@ -45,7 +45,7 @@ public class TemperatureConverterTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), DELTA);
       assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
@@ -62,7 +62,7 @@ public class TemperatureConverterTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), DELTA);
       assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
@@ -72,7 +72,7 @@ public class TemperatureConverterTest {
     final String message = "The temperature is 3,3,3.3 F, it's hot.";
     final TemperatureConverter converter = new TemperatureConverter();
     final List<Temperature> actualResult = converter.extractTemperatures(message);
-    assertEquals(333.3, actualResult.get(0).getValue(), delta);
+    assertEquals(333.3, actualResult.get(0).getValue(), DELTA);
   }
 
   @Test
@@ -89,7 +89,7 @@ public class TemperatureConverterTest {
     assertEquals(actualResult.size(), expectedUnits.length);
 
     for (int i = 0; i < expectedUnits.length; ++i) {
-      assertEquals(expectedValues[i], actualResult.get(i).getValue(), delta);
+      assertEquals(expectedValues[i], actualResult.get(i).getValue(), DELTA);
       assertEquals(expectedUnits[i], actualResult.get(i).getUnit());
     }
   }
@@ -101,7 +101,7 @@ public class TemperatureConverterTest {
     final List<Temperature> actualResult = converter.convertTemperatureList(temp);
     assertEquals(1, actualResult.size());
     assertEquals(Celsius, actualResult.get(0).getUnit());
-    assertEquals(48.88, actualResult.get(0).getValue(), delta);
+    assertEquals(48.88, actualResult.get(0).getValue(), DELTA);
   }
 
   @Test

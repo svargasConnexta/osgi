@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint
-        xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 ">
-
-    <!--Create a new instance of a class. Give it an ID so we can refer to it later.
-    The "container" keeps track of the new object and its ID.
-    Also, invoke an initialization routine when the bean is created. -->
-    <service id="temperatureConversion" auto-export="all-classes">
-        <bean class="conversionbot.TemperatureConverter"/>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <service id="conversionBot" interface="interfaces.ConversionPlugin">
+        <service-properties>
+            <entry key="conversionPlugin" value="temperatureConversion"/>
+        </service-properties>
+        <bean class="conversionbot.TemperatureConverterPlugin"/>
     </service>
 </blueprint>

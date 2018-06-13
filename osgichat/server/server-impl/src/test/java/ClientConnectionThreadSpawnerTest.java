@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class ClientConnectionThreadSpawnerTest {
 
   // Shared components
-  private final int portNumber = 8080;
+  private final int portNumber = 8192;
 
   // Server components
   private final String url = "127.0.0.1";

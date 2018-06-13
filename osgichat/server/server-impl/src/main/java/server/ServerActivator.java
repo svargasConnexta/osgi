@@ -2,38 +2,44 @@ package server;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
+import org.osgi.framework.InvalidSyntaxException;
+import plugin.PluginRegistry;
+
+import interfaces.ConversionPlugin;
 
 import java.io.IOException;
 
-public class ServerActivator implements BundleActivator, BundleListener {
+public class ServerActivator implements BundleActivator {
 
   private ClientConnectionThreadSpawner clientConnectionThreadSpawner;
   private Thread connectionListenThread;
-  //private PluginListener pluginListener;
-  private final int maxUsers = 10;
-  private final int port = 8080;
+  private PluginRegistry pluginRegistry;
+  private static final int MAX_USERS = 10;
+  private static final int PORT = 8081;
 
   @Override
-  public void start(BundleContext bundleContext) throws IOException {
-    MessageDispatcher messageDispatcher = new DefaultMessageDispatcher(maxUsers);
-    clientConnectionThreadSpawner = new ClientConnectionThreadSpawner(messageDispatcher, port);
+  public void start(BundleContext bundleContext) throws IOException, InvalidSyntaxException {
+
+    // Spaghetti: bundleContext.getAllServiceReferences(null, "(conversionPlugin=*)")[0].getBundle();
+    //bundleContext.getAllServiceReferences(null, "(conversionPlugin=*)")[0].getBundle().loadClass(ConversionPlugin.class.getName())
+
+
+
+
+
+
+    MessageDispatcher messageDispatcher = new DefaultMessageDispatcher(MAX_USERS);
+    clientConnectionThreadSpawner = new ClientConnectionThreadSpawner(messageDispatcher, PORT);
     connectionListenThread = new Thread(clientConnectionThreadSpawner);
     connectionListenThread.start();
-    //pluginListener = new PluginListener();
-    //bundleContext.addBundleListener(pluginListener);
-    //bundleContext.getServiceReferences()
+    pluginRegistry = new PluginRegistry(bundleContext);
+    bundleContext.addBundleListener(pluginRegistry);
   }
 
   @Override
   public void stop(BundleContext bundleContext) throws Exception {
     clientConnectionThreadSpawner.exit();
     connectionListenThread.join();
-    //bundleContext.removeBundleListener(pluginListener);
-  }
-
-  @Override
-  public void bundleChanged(BundleEvent event) {
+    bundleContext.removeBundleListener(pluginRegistry);
   }
 }

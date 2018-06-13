@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint src="https://osgi.org/xmlns/scr/v1.2.0/">
+    <service id="conversionPlugin">
+        <provide interface="interfaces.ConversionPlugin"/>
+    </service>
+</blueprint>

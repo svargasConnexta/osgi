@@ -11,7 +11,22 @@
 
     <artifactId>server-impl</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>indie.sam.osgichat</groupId>
+            <artifactId>server-interfaces</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>indie.sam.osgichat</groupId>
+            <artifactId>server-interfaces</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
+    <!-- Bundles need to include the bundle plugin / include this packaging-->
+    <packaging>bundle</packaging>
     <build>
         <plugins>
             <plugin>
@@ -31,6 +46,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>

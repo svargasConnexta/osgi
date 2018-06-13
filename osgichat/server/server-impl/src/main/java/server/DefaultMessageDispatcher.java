@@ -19,8 +19,9 @@ public class DefaultMessageDispatcher implements MessageDispatcher {
 
   @Override
   public void dispatchMessage(ClientConnection origin, String message) {
+
+
     for (final ClientConnection c : clients) {
-      //c.sendMessage(origin.getID() + " " + message);
       c.sendMessage(message);
     }
   }

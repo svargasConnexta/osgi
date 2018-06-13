@@ -28,6 +28,12 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.aries.blueprint</groupId>
+            <artifactId>org.apache.aries.blueprint</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -41,6 +47,7 @@
                         <!--This embed header is needed because there is no bundle that exports this package-->
                         <Embed-Dependency>
                             commons-math3
+                            interfaces.ConversionPlugin
                         </Embed-Dependency>
                         <!--These exports are needed for the service consumer lesson-->
                         <Export-Package>
@@ -53,6 +60,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -60,6 +68,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
